@@ -1,0 +1,1671 @@
+/* ==========================================================================
+ * style.css —— 梗指北 全局样式
+ * --------------------------------------------------------------------------
+ * 设计原则：
+ *   1. 简约干净：白底 + 浅灰背景 + 单一主题色（蓝），弱化装饰
+ *   2. 移动端适配：卡片栅格使用 auto-fit，窄屏自动变单列
+ *   3. 全部使用原生 CSS，无任何第三方依赖
+ * ========================================================================== */
+
+/* ------------------------- 1. 主题变量（方便统一换色） ------------------------- */
+:root {
+  --color-primary: #2f6fed;        /* 主题色 */
+  --color-primary-dark: #1f56c4;   /* 主题色（悬停） */
+  --color-primary-soft: #eaf1ff;   /* 主题色浅底 */
+  --color-danger: #e5484d;         /* 危险色（删除） */
+  --color-bg: #f5f6f8;             /* 页面背景 */
+  --color-card: #ffffff;           /* 卡片背景 */
+  --color-text: #1f2329;           /* 主文字 */
+  --color-text-sub: #6b7280;       /* 次要文字 */
+  --color-border: #e5e7eb;         /* 边框 */
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, .06);
+  --shadow-md: 0 4px 16px rgba(16, 24, 40, .08);
+
+  --max-width: 1080px;
+  --space: 16px;
+}
+
+/* ------------------------------- 2. 基础重置 ------------------------------- */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  /* 移动端点击高亮去掉，观感更干净 */
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* 布局工具类 */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.text-sub {
+  color: var(--color-text-sub);
+}
+
+/* ------------------------------- 3. 顶部导航栏 ------------------------------ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, .92);
+  backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 58px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.logo:hover {
+  text-decoration: none;
+}
+
+.logo__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  display: inline-block;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav__user {
+  font-size: 14px;
+  color: var(--color-text-sub);
+  margin-right: 4px;
+}
+
+/* 管理员徽标 */
+.badge-admin {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 18px;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.badge-author {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 18px;
+  padding: 0 8px;
+  border-radius: 999px;
+  color: var(--color-text-sub);
+  background: #f1f2f4;
+  vertical-align: middle;
+}
+
+/* --------------------------------- 4. 按钮 -------------------------------- */
+/* 全局统一按钮：所有 .btn 以及 .btn--primary / .btn--ghost / .btn--danger
+ * 的外形完全相同（高度、内边距、字号、圆角、边框宽度一致），
+ * 只用配色区分语义：主要操作 = 蓝底白字，次要操作 = 白底描边，删除 = 红字描边。
+ * 需要新增按钮时直接用 class="btn" 或再加一个配色类，不要改尺寸。 */
+.btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 36px;                  /* 固定高度：所有按钮一样高 */
+  padding: 0 16px;               /* 固定内边距：所有按钮一样宽 */
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;         /* a.btn 不要下划线 */
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+/* 主要操作：蓝底白字 */
+.btn--primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: #fff;
+}
+
+/* 次要操作：白底描边（与默认 .btn 一致） */
+.btn--ghost {
+  background: #fff;
+  border-color: var(--color-border);
+  color: var(--color-text-sub);
+}
+
+.btn--ghost:hover {
+  color: var(--color-text);
+  border-color: #cfd4dc;
+  background: #fff;
+}
+
+/* 危险操作：红字描边 */
+.btn--danger {
+  background: #fff;
+  border-color: #f3c7c8;
+  color: var(--color-danger);
+}
+
+.btn--danger:hover {
+  background: #fdf1f1;
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+/* 仅控制宽度：占满一行（表单提交按钮用） */
+.btn--block {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+/* --------------------------------- 5. 页面标题 ------------------------------ */
+.page-title {
+  margin: 28px 0 4px;
+  font-size: 22px;
+}
+
+.page-desc {
+  margin: 0 0 20px;
+  color: var(--color-text-sub);
+  font-size: 14px;
+}
+
+/* ------------------------------- 6. 表单（登录/注册/发布） ------------------- */
+.form-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  max-width: 460px;
+  margin: 32px auto 48px;
+}
+
+.form-card--wide {
+  max-width: 680px;
+}
+
+.form-item {
+  margin-bottom: 16px;
+}
+
+.form-item:last-of-type {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-label .required {
+  color: var(--color-danger);
+  margin-left: 2px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--color-text);
+  background: #fff;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, .12);
+}
+
+.textarea {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.form-hint {
+  font-size: 13px;
+  color: var(--color-text-sub);
+  margin-top: 6px;
+}
+
+/* 表单错误提示条 */
+.form-msg {
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.form-msg--error {
+  display: block;
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+}
+
+.form-msg--success {
+  display: block;
+  color: #05603a;
+  background: #ecfdf3;
+  border: 1px solid #a6f4c5;
+}
+
+.form-footer {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-sub);
+}
+
+/* 图片选择与预览 */
+.file-preview {
+  margin-top: 10px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.file-preview img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  background: #fafafa;
+}
+
+/* ------------------------------- 7. 工具栏（首页） -------------------------- */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.toolbar .input {
+  flex: 1 1 220px;
+  max-width: 320px;
+}
+
+.toolbar__count {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--color-text-sub);
+}
+
+/* 分段筛选按钮组 */
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #fff;
+}
+
+.segmented button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--color-text-sub);
+  cursor: pointer;
+}
+
+.segmented button + button {
+  border-left: 1px solid var(--color-border);
+}
+
+.segmented button.is-active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* ------------------------------- 8. 博客卡片列表 ---------------------------- */
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+  padding-bottom: 48px;
+}
+
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow .18s, transform .18s;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* 卡片封面图：统一 4:3 裁切，保证列表整齐 */
+.card__cover {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #f0f1f3;
+  cursor: zoom-in;
+}
+
+.card__body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card__title {
+  margin: 0 0 8px;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+/* 卡片标题是可点击链接，点进去看单篇博客详情 */
+.card__title a {
+  color: inherit;
+}
+
+.card__title a:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--color-text-sub);
+  margin-bottom: 10px;
+}
+
+.card__text {
+  margin: 0 0 12px;
+  white-space: pre-wrap;   /* 保留用户输入的换行 */
+  word-break: break-word;
+  color: #33383f;
+}
+
+/* 长文折叠 */
+.card__text.is-clamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;                /* 标准属性，与 -webkit- 版本同时声明以兼容各浏览器 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.card__actions .spacer {
+  margin-left: auto;
+}
+
+.link-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+/* -------------------------------- 9. 评论区 -------------------------------- */
+.comments {
+  margin-top: 12px;
+  border-top: 1px dashed var(--color-border);
+  padding-top: 12px;
+}
+
+.comments__title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.comment-list {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.comment-item {
+  background: #fafbfc;
+  border: 1px solid #eef0f3;
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+}
+
+.comment-item__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text-sub);
+  margin-bottom: 4px;
+}
+
+.comment-item__author {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.comment-item__content {
+  margin: 0;
+  font-size: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.comment-item__head .spacer {
+  margin-left: auto;
+}
+
+.comment-form {
+  display: flex;
+  gap: 8px;
+}
+
+.comment-form .input {
+  flex: 1;
+}
+
+/* ------------------------------ 10. 空状态 / 提示 --------------------------- */
+.empty {
+  text-align: center;
+  padding: 48px 16px;
+  color: var(--color-text-sub);
+  background: #fff;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: 48px;
+}
+
+.empty__icon {
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+/* 轻提示（Toast） */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translate(-50%, 20px);
+  background: rgba(31, 35, 41, .92);
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s, transform .22s;
+  z-index: 99;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.toast.is-show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* 图片放大查看遮罩 */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .82);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+  cursor: zoom-out;
+}
+
+.lightbox.is-show {
+  display: flex;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+/* --------------------------------- 11. 页脚 -------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--color-border);
+  background: #fff;
+  color: var(--color-text-sub);
+  font-size: 13px;
+  text-align: center;
+  padding: 18px 16px;
+}
+
+/* ------------------------- 12. 博客详情页（单篇打开） ----------------------- */
+.post-detail {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  margin: 24px auto 48px;
+  max-width: 820px;
+}
+
+.post-detail__breadcrumb {
+  margin: 0 0 12px;
+  font-size: 14px;
+}
+
+.post-detail__title {
+  margin: 0 0 10px;
+  font-size: 26px;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+/* 详情页大图：完整显示不裁切，点击可放大 */
+.post-detail__cover {
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+  background: #fafafa;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin: 6px 0 18px;
+  cursor: zoom-in;
+}
+
+.post-detail__content {
+  white-space: pre-wrap;   /* 保留换行 */
+  word-break: break-word;
+  font-size: 16px;
+  line-height: 1.9;
+  color: #33383f;
+  margin: 6px 0 18px;
+}
+
+/* 详情页的评论不需要限高滚动 */
+.post-detail .comment-list {
+  max-height: none;
+}
+
+/* 上一篇 / 下一篇 */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--color-border);
+  font-size: 14px;
+}
+
+.post-nav a {
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-nav__placeholder {
+  color: var(--color-text-sub);
+}
+
+/* ------------------------- 13. 用户博客专区 ------------------------- */
+/* 首页上的专区入口横幅（浅色卡片式，里面用的也是全局统一按钮样式） */
+.zone-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--color-primary-soft);
+  border: 1px solid #d6e4ff;
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  margin: 0 0 18px;
+}
+
+.zone-banner__title {
+  margin: 0 0 4px;
+  font-size: 17px;
+  color: var(--color-primary-dark);
+}
+
+.zone-banner__text {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.zone-banner__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* 状态提示卡（未登录 / 已登录 / 还没发过博客） */
+.callout {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  background: var(--color-primary-soft);
+  border: 1px solid #d6e4ff;
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.callout--warn {
+  background: #fff8e6;
+  border-color: #ffe3a3;
+}
+
+.callout__icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.callout__body {
+  flex: 1 1 260px;
+}
+
+.callout__title {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.callout__text {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.callout__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 发布须知 */
+.tips-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+
+.tips-card__title {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.tips-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  color: var(--color-text-sub);
+}
+
+.tips-list li + li {
+  margin-top: 4px;
+}
+
+/* 空状态里的操作按钮 */
+.empty__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+/* -------------- 14. 首页分区（管理员博客 / 用户博客） -------------- */
+.section {
+  margin-bottom: 32px;
+  /* 从左侧目录栏跳转过来时，给吸顶导航让出高度，标题不会被盖住 */
+  scroll-margin-top: 78px;
+}
+
+.section__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section__info {
+  min-width: 0;
+}
+
+.section__title {
+  margin: 0 0 2px;
+  font-size: 19px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.section__desc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-text-sub);
+}
+
+.section__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.section__count {
+  font-size: 13px;
+  color: var(--color-text-sub);
+}
+
+/* 「展开更多 / 收起」按钮居中 */
+.section__more {
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* 分区内的列表与空状态不要额外留白 */
+.section .post-list {
+  padding-bottom: 0;
+}
+
+.section .empty {
+  margin-bottom: 0;
+}
+
+/* ------------- 15. 左侧目录栏（管理员博客 / 用户博客） ------------- */
+/* 首页整体布局：左边目录栏，右边内容区 */
+.layout {
+  display: grid;
+  grid-template-columns: 196px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+/* 目录栏随页面滚动吸顶 */
+.sidebar {
+  position: sticky;
+  top: 76px;                     /* 顶部导航高度 + 间距 */
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 12px;
+}
+
+.sidebar__title {
+  margin: 0 0 10px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--color-text-sub);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 14px;
+  transition: background-color .15s, color .15s;
+}
+
+.sidebar__item:hover {
+  background: #f3f5f8;
+  text-decoration: none;
+}
+
+/* 当前正在浏览的分区高亮 */
+.sidebar__item.is-active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.sidebar__icon {
+  line-height: 1;
+}
+
+.sidebar__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar__count {
+  font-size: 12px;
+  color: var(--color-text-sub);
+}
+
+.sidebar__item.is-active .sidebar__count {
+  color: var(--color-primary);
+}
+
+.sidebar__foot {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--color-border);
+}
+
+/* 中等及以下屏幕：目录栏变成内容上方的横向条（保持可用，不再吸顶） */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .sidebar {
+    position: static;
+    padding: 10px;
+  }
+
+  .sidebar__title,
+  .sidebar__foot {
+    display: none;
+  }
+
+  .sidebar__nav {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .sidebar__item {
+    flex: 1 1 0;
+    justify-content: center;
+    background: #f5f6f8;
+  }
+}
+
+/* -------------------- 16. 管理后台（mg.html） -------------------- */
+/* 顶部统计卡片 */
+.mg-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mg-stat {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+}
+
+.mg-stat__value {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.mg-stat__label {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.mg-stat__sub {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--color-text-sub);
+}
+
+/* 页签（用户管理 / 博客管理 / 评论管理 / 数据管理） */
+.mg-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 18px;
+}
+
+.mg-tab {
+  appearance: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--color-text-sub);
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+
+.mg-tab:hover {
+  color: var(--color-text);
+}
+
+.mg-tab.is-active {
+  color: var(--color-primary);
+  font-weight: 600;
+  border-bottom-color: var(--color-primary);
+}
+
+/* 数据表格（窄屏可横向滚动） */
+.table-wrap {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  margin-bottom: 18px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 640px;      /* 保证列不被压挤，窄屏靠外层滚动 */
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid #eef0f3;
+  vertical-align: middle;
+}
+
+.table th {
+  background: #fafbfc;
+  font-weight: 600;
+  color: var(--color-text-sub);
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr:hover {
+  background: #fcfcfd;
+}
+
+.table__actions {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.table__sub {
+  font-size: 12px;
+  color: var(--color-text-sub);
+}
+
+/* 数据管理里的功能块 */
+.mg-block {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+
+.mg-block--danger {
+  border-color: #f3c7c8;
+  background: #fffafa;
+}
+
+.mg-block__title {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+
+.mg-block__text {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--color-text-sub);
+}
+
+/* 编辑弹窗 */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, .5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 120;
+}
+
+.modal.is-show {
+  display: flex;
+}
+
+.modal__box {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 520px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 40px rgba(16, 24, 40, .2);
+}
+
+.modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal__title {
+  margin: 0;
+  font-size: 16px;
+}
+
+.modal__close {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--color-text-sub);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.modal__close:hover {
+  color: var(--color-text);
+}
+
+.modal__body {
+  padding: 16px 18px;
+  overflow-y: auto;
+}
+
+.modal__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ------------------------------- 16.5 头像 ---------------------------- */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  flex: none;
+  overflow: hidden;
+  object-fit: cover;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.avatar--placeholder {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.avatar--sm {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+
+.avatar--lg {
+  width: 56px;
+  height: 56px;
+  font-size: 22px;
+}
+
+/* 头像 + 名字的组合（卡片元信息、评论作者、后台表格等） */
+.meta-user,
+.nav__name,
+.comment-item__author {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 可点击进入用户主页的头像 / 昵称链接 */
+.user-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.user-link:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.user-link:hover .avatar {
+  border-color: var(--color-primary);
+}
+
+/* 导航栏里的当前用户：点击进入「我的主页」 */
+a.nav__user {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--color-text-sub);
+  margin-right: 4px;
+  text-decoration: none;
+}
+
+a.nav__user:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a.nav__user:hover .avatar {
+  border-color: var(--color-primary);
+}
+
+/* 用户主页：信息卡（含真实姓名） */
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  margin: 20px 0 26px;
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-card__avatar {
+  line-height: 0;
+  flex: none;
+}
+
+.profile-card__info {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.profile-card__name {
+  margin: 0 0 10px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.profile-card__row {
+  margin: 4px 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-card__label {
+  display: inline-block;
+  min-width: 72px;
+  color: var(--color-text-sub);
+  flex: none;
+}
+
+.profile-card__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* 后台用户表：密码列与加宽表格 */
+.pwd-cell {
+  white-space: nowrap;
+}
+
+.pwd-text {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  margin-right: 8px;
+  word-break: break-all;
+}
+
+.table--wide {
+  min-width: 920px;
+}
+
+.callout__avatar {
+  line-height: 0;
+}
+
+/* 头像编辑弹窗 */
+.avatar-editor {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.avatar-editor__preview {
+  flex: none;
+  line-height: 0;
+}
+
+.avatar-editor__preview .avatar {
+  width: 96px;
+  height: 96px;
+  font-size: 36px;
+}
+
+.avatar-editor__side {
+  flex: 1;
+  min-width: 0;
+}
+
+.avatar-editor__side .text-sub {
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+  .avatar-editor {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* -------------------- 16.8 站点提示横幅 & 意见反馈 -------------------- */
+/* 全站顶部提示横幅（导航栏下方） */
+.site-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: #fff;
+  background: linear-gradient(135deg, var(--color-primary), #7a4ff0);
+}
+
+.site-notice__icon {
+  font-size: 16px;
+  flex: none;
+}
+
+.site-notice__text {
+  line-height: 1.5;
+}
+
+/* 右下角悬浮的「意见反馈」按钮 */
+.feedback-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 110;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(47, 111, 237, .35);
+  transition: transform .15s, background .15s, box-shadow .15s;
+}
+
+.feedback-fab:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(47, 111, 237, .42);
+}
+
+.feedback-fab:active {
+  transform: translateY(0);
+}
+
+.feedback-fab__icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* 后台反馈表格中的内容列 */
+.feedback-cell {
+  min-width: 220px;
+  max-width: 420px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ------------------------------- 17. 移动端适配 ---------------------------- */
+@media (max-width: 640px) {
+  :root {
+    --space: 12px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  .site-header__inner {
+    min-height: 52px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  /* 手机上卡片单列铺满 */
+  .post-list {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .form-card {
+    margin: 16px 0 32px;
+    padding: 18px;
+  }
+
+  .page-title {
+    margin: 20px 0 4px;
+    font-size: 19px;
+  }
+
+  .toolbar .input {
+    max-width: none;
+    flex: 1 1 100%;
+  }
+
+  .toolbar__count {
+    margin-left: 0;
+  }
+
+  /* 评论输入在手机上换行排布 */
+  .comment-form {
+    flex-direction: column;
+  }
+
+  .comment-form .btn {
+    width: 100%;
+  }
+
+  /* 详情页在手机上收窄内边距 */
+  .post-detail {
+    padding: 16px;
+    margin: 16px 0 32px;
+    border-radius: var(--radius-md);
+  }
+
+  .post-detail__title {
+    font-size: 21px;
+  }
+
+  .post-detail__content {
+    font-size: 15px;
+  }
+
+  .post-nav {
+    flex-direction: column;
+  }
+
+  .post-nav a {
+    max-width: 100%;
+  }
+
+  /* 导航按钮间距紧凑一些，避免手机上换行过多（尺寸保持与全局一致） */
+  .nav {
+    gap: 6px;
+  }
+
+  .nav__user {
+    font-size: 13px;
+  }
+
+  /* 专区入口横幅与提示卡 */
+  .zone-banner {
+    padding: 14px 16px;
+  }
+
+  .zone-banner__actions .btn {
+    flex: 1 1 auto;
+  }
+
+  .callout {
+    padding: 14px 16px;
+  }
+
+  .callout__actions {
+    width: 100%;
+  }
+
+  .callout__actions .btn {
+    flex: 1 1 auto;
+  }
+
+  /* 首页分区在手机上标题更紧凑 */
+  .section {
+    margin-bottom: 24px;
+  }
+
+  .section__head {
+    align-items: flex-start;
+  }
+
+  .section__title {
+    font-size: 17px;
+  }
+
+  /* 管理后台：手机上表格内边距更紧凑 */
+  .table th,
+  .table td {
+    padding: 8px 10px;
+  }
+
+  .mg-tab {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .modal__box {
+    max-height: 92vh;
+  }
+
+  /* 站点提示横幅：手机上字号与内边距更紧凑 */
+  .site-notice {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  /* 反馈悬浮按钮：手机上收成一个圆形图标按钮，避免遮挡内容 */
+  .feedback-fab {
+    right: 14px;
+    bottom: 14px;
+    padding: 13px;
+    border-radius: 50%;
+  }
+
+  .feedback-fab__label {
+    display: none;
+  }
+
+  /* 用户主页信息卡：手机上更紧凑 */
+  .profile-card {
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .profile-card__name {
+    font-size: 19px;
+  }
+
+  .profile-card__label {
+    min-width: 64px;
+  }
+}
