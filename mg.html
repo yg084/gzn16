@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理后台 · 梗指北</title>
+  <meta name="description" content="梗指北 · 可视化管理后台（mg.html）：管理员可查看统计数据，并管理所有用户、博客与评论。" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<!-- data-page 告诉 main.js：当前是管理后台页（可视化管理员 mg） -->
+<body data-page="mg">
+
+  <!-- ============================ 顶部导航 ============================ -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="index.html">
+        <span class="logo__dot"></span>
+        梗指北
+      </a>
+      <nav class="nav" id="nav"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ============================ 页面标题 ============================ -->
+    <h1 class="page-title">🛠️ 管理后台</h1>
+    <p class="page-desc">
+      可视化管理员（mg）：查看站点统计数据，并对<strong>所有用户、博客、评论</strong>进行修改与删除。
+    </p>
+
+    <!-- 提示条：未登录时的跳转提示、操作结果提示 -->
+    <div class="form-msg" id="mgMsg"></div>
+
+    <!-- ==================== 无权限提示（非管理员可见） ==================== -->
+    <div class="empty hidden" id="mgForbidden">
+      <div class="empty__icon">🔒</div>
+      <p>你没有权限访问管理后台</p>
+      <p class="text-sub" style="font-size:13px">管理后台仅限管理员 yg 使用，请使用管理员账号登录。</p>
+      <div class="empty__actions">
+        <a class="btn btn--primary" href="login.html">去登录管理员账号</a>
+        <a class="btn btn--ghost" href="index.html">返回首页</a>
+      </div>
+    </div>
+
+    <!-- ==================== 后台主体（有权限时显示） ==================== -->
+    <div class="hidden" id="mgPanel">
+
+      <!-- 统计数据卡片（JS 渲染） -->
+      <section class="mg-stats" id="mgStats"></section>
+
+      <!-- 页签 -->
+      <nav class="mg-tabs" id="mgTabs">
+        <button type="button" class="mg-tab" data-tab="users">👤 用户管理</button>
+        <button type="button" class="mg-tab" data-tab="posts">📄 博客管理</button>
+        <button type="button" class="mg-tab" data-tab="comments">💬 评论管理</button>
+        <button type="button" class="mg-tab" data-tab="feedback">📮 反馈管理</button>
+        <button type="button" class="mg-tab" data-tab="data">💾 数据管理</button>
+      </nav>
+
+      <!-- 当前页签的内容（JS 渲染） -->
+      <section class="mg-view" id="mgView"></section>
+    </div>
+  </main>
+
+  <!-- ============================ 页脚 ============================ -->
+  <footer class="site-footer">
+    梗指北 · 纯前端实现 · 数据保存在浏览器 localStorage
+  </footer>
+
+  <!-- ============================ 编辑弹窗 ============================ -->
+  <div class="modal" id="mgModal">
+    <div class="modal__box">
+      <div class="modal__head">
+        <h3 class="modal__title" id="mgModalTitle">编辑</h3>
+        <button type="button" class="modal__close" id="mgModalClose" aria-label="关闭">✕</button>
+      </div>
+      <div class="modal__body">
+        <!-- 弹窗内的错误提示 -->
+        <div class="form-msg" id="mgModalMsg"></div>
+        <!-- 表单字段（JS 渲染） -->
+        <div id="mgModalFields"></div>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn--ghost" id="mgModalCancel">取消</button>
+        <button type="button" class="btn btn--primary" id="mgModalSubmit">保存修改</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 轻提示 -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>博客详情 · 梗指北</title>
+  <meta name="description" content="梗指北 —— 单篇博客详情页，可查看大图、完整正文与全部评论。" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<!-- data-page 告诉 main.js：当前是单篇博客详情页（通过 ?id=博客id 打开） -->
+<body data-page="post">
+
+  <!-- ============================ 顶部导航 ============================ -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="index.html">
+        <span class="logo__dot"></span>
+        梗指北
+      </a>
+      <nav class="nav" id="nav"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ============================ 单篇博客详情 ============================ -->
+    <!-- 内容（大图 + 标题 + 发布人 + 发布时间 + 完整正文 + 评论区）由 js/main.js 渲染 -->
+    <div id="postDetail"></div>
+
+    <!-- 博客 id 不存在或已被删除时的空状态 -->
+    <div class="empty hidden" id="emptyState">
+      <div class="empty__icon">🔍</div>
+      <p>没有找到这篇博客，它可能已被删除。</p>
+      <p><a href="index.html">← 返回首页</a></p>
+    </div>
+  </main>
+
+  <!-- ============================ 页脚 ============================ -->
+  <footer class="site-footer">
+    梗指北 · 纯前端实现 · 数据保存在浏览器 localStorage
+  </footer>
+
+  <!-- 图片放大遮罩 -->
+  <div class="lightbox" id="lightbox"></div>
+  <!-- 轻提示 -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>

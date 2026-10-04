@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>用户主页 · 梗指北</title>
+  <meta name="description" content="梗指北 · 用户主页：查看用户头像、昵称与真实姓名，以及该用户发布的博客。" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<!-- data-page 告诉 main.js：当前是用户主页（通过 ?name=用户名 打开） -->
+<body data-page="profile">
+
+  <!-- ============================ 顶部导航 ============================ -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="index.html">
+        <span class="logo__dot"></span>
+        梗指北
+      </a>
+      <nav class="nav" id="nav"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 用户信息卡（含真实姓名，由 js/main.js 渲染） -->
+    <div id="profileCard"></div>
+
+    <!-- 该用户发布的博客 -->
+    <section class="section">
+      <header class="section__head">
+        <div class="section__info">
+          <h2 class="section__title" id="profilePostTitle">📄 TA 的博客</h2>
+          <p class="section__desc" id="profilePostDesc"></p>
+        </div>
+        <div class="section__actions">
+          <span class="section__count" id="profilePostCount"></span>
+        </div>
+      </header>
+
+      <div class="post-list" id="profilePostList"></div>
+
+      <div class="empty hidden" id="profileEmpty">
+        <div class="empty__icon">📝</div>
+        <p id="profileEmptyText">TA 还没有发布过博客</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================ 页脚 ============================ -->
+  <footer class="site-footer">
+    梗指北 · 纯前端实现 · 数据保存在浏览器 localStorage
+  </footer>
+
+  <!-- 图片放大遮罩 -->
+  <div class="lightbox" id="lightbox"></div>
+  <!-- 轻提示 -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>

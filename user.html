@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>用户博客专区 · 梗指北</title>
+  <meta name="description" content="梗指北 · 用户博客专区：展示普通用户发布的博客，并提供发布入口与操作提示。" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<!-- data-page 告诉 main.js：当前是用户博客专区页 -->
+<body data-page="user">
+
+  <!-- ============================ 顶部导航 ============================ -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="index.html">
+        <span class="logo__dot"></span>
+        梗指北
+      </a>
+      <nav class="nav" id="nav"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ============================ 页面标题 ============================ -->
+    <h1 class="page-title">用户博客专区</h1>
+    <p class="page-desc">
+      这里展示<strong>普通用户发布的博客</strong>（yg 发布的博客请在首页「管理员博客」分区查看），也是你发布图文博客的入口。
+    </p>
+
+    <!-- ==================== 用户提示（登录状态 / 发布引导，由 JS 渲染） ==================== -->
+    <section id="userZoneTip"></section>
+
+    <!-- ==================== 发布须知（静态提示） ==================== -->
+    <section class="tips-card">
+      <h2 class="tips-card__title">📌 发布须知</h2>
+      <ul class="tips-list">
+        <li>发布博客需要<strong>先登录</strong>，未登录时点击「发布我的博客」会先跳转到登录页。</li>
+        <li>博客内容为「<strong>文字描述 + 图片</strong>」，标题与文字描述必填，图片可选（会自动压缩后保存在本机浏览器）。</li>
+        <li>评论<strong>仅支持文字</strong>，同样需要登录后才可以发表。</li>
+        <li>你只能删除<strong>自己发布的博客和自己写的评论</strong>；管理员 yg 拥有全部管理权限。</li>
+        <li>所有数据保存在浏览器 localStorage，<strong>换浏览器或清除浏览器数据后内容不会保留</strong>。</li>
+      </ul>
+    </section>
+
+    <!-- ==================== 工具栏：搜索 + 筛选 ==================== -->
+    <section class="toolbar">
+      <input id="searchInput" class="input" type="search" placeholder="在专区中搜索标题、内容或作者…" autocomplete="off" />
+
+      <div class="segmented" id="zoneFilterGroup">
+        <button type="button" data-filter="all" class="is-active">全部用户博客</button>
+        <button type="button" data-filter="mine">我的博客</button>
+      </div>
+
+      <span class="toolbar__count" id="postCount"></span>
+    </section>
+
+    <!-- ==================== 用户博客列表（由 JS 渲染） ==================== -->
+    <section class="post-list" id="userPostList"></section>
+
+    <!-- ==================== 空状态 + 发布引导 ==================== -->
+    <div class="empty hidden" id="emptyState">
+      <div class="empty__icon">✍️</div>
+      <p>专区里还没有匹配的用户博客</p>
+      <p class="text-sub" style="font-size:13px">登录后点击下方按钮，写下专区里的第一篇吧。</p>
+      <div class="empty__actions">
+        <a class="btn btn--primary" href="publish.html">去发布我的博客</a>
+        <a class="btn btn--ghost" href="index.html">返回首页</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============================ 页脚 ============================ -->
+  <footer class="site-footer">
+    梗指北 · 纯前端实现 · 数据保存在浏览器 localStorage
+  </footer>
+
+  <!-- 图片放大遮罩 -->
+  <div class="lightbox" id="lightbox"></div>
+  <!-- 轻提示 -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>

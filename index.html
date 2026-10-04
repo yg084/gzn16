@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>梗指北 · 博客首页</title>
+  <meta name="description" content="梗指北 —— 纯前端简易博客：注册、登录、发布图文博客、文字评论，数据保存在浏览器 localStorage。" />
+  <!-- 全局样式 -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<!-- data-page 告诉 main.js：当前是首页，需要渲染博客列表 -->
+<body data-page="home">
+
+  <!-- ============================ 顶部导航 ============================ -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="index.html">
+        <span class="logo__dot"></span>
+        梗指北
+      </a>
+      <nav class="nav" id="nav"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ============================ 页面标题 ============================ -->
+    <h1 class="page-title">博客首页</h1>
+    <p class="page-desc">
+      首页按作者分为「管理员博客」与「用户博客」两个分区；点击卡片标题或「阅读全文」可进入单篇详情页。
+    </p>
+
+    <!-- ==================== 左侧目录栏 + 主内容区 ==================== -->
+    <div class="layout">
+
+      <!-- ---------- 左侧目录栏：管理员博客 / 用户博客 ---------- -->
+      <aside class="sidebar">
+        <p class="sidebar__title">博客目录</p>
+
+        <!-- 点击在页面内平滑滚动到对应分区，滚动时自动高亮当前分区 -->
+        <nav class="sidebar__nav" id="sidebarNav">
+          <a class="sidebar__item is-active" href="#adminSection" data-target="adminSection">
+            <span class="sidebar__icon">🖼️</span>
+            <span class="sidebar__label">管理员博客</span>
+            <span class="sidebar__count" id="sideAdminCount">0</span>
+          </a>
+          <a class="sidebar__item" href="#userSection" data-target="userSection">
+            <span class="sidebar__icon">✍️</span>
+            <span class="sidebar__label">用户博客</span>
+            <span class="sidebar__count" id="sideUserCount">0</span>
+          </a>
+        </nav>
+
+        <div class="sidebar__foot">
+          <a class="btn btn--primary btn--block" href="publish.html">发布我的博客</a>
+        </div>
+      </aside>
+
+      <!-- ---------- 主内容区 ---------- -->
+      <div class="layout__main">
+
+        <!-- ============================ 工具栏：搜索 / 筛选 ============================ -->
+        <section class="toolbar">
+          <!-- 关键词搜索：同时作用于下方两个分区（标题 + 正文 + 作者） -->
+          <input id="searchInput" class="input" type="search" placeholder="搜索全部博客的标题、内容或作者…" autocomplete="off" />
+
+          <!-- 筛选：全部博客 / 我的博客（需登录） -->
+          <div class="segmented" id="filterGroup">
+            <button type="button" data-filter="all" class="is-active">全部博客</button>
+            <button type="button" data-filter="mine">我的博客</button>
+          </div>
+
+          <span class="toolbar__count" id="postCount"></span>
+        </section>
+
+        <!-- ==================== 用户博客专区入口 ==================== -->
+        <!-- 横幅文案会按登录状态变化，由 js/main.js 填充 -->
+        <section class="zone-banner">
+          <div>
+            <h2 class="zone-banner__title">✍️ 用户博客专区</h2>
+            <p class="zone-banner__text" id="zoneBannerTip">专区里都是用户自己发布的博客，登录后即可发布你的图文博客。</p>
+          </div>
+          <div class="zone-banner__actions">
+            <a class="btn btn--primary" href="user.html">进入专区</a>
+            <a class="btn btn--ghost" href="publish.html">我要发布</a>
+          </div>
+        </section>
+
+        <!-- ==================== 分区一：管理员博客 ==================== -->
+        <section class="section" id="adminSection">
+          <header class="section__head">
+            <div class="section__info">
+              <h2 class="section__title">
+                🖼️ 管理员博客
+                <span class="badge-admin">yg</span>
+              </h2>
+              <p class="section__desc">
+                管理员 yg 的图片随笔，由 images 文件夹中的图片自动生成（一张图片对应一篇博客）。
+              </p>
+            </div>
+            <div class="section__actions">
+              <span class="section__count" id="adminCount"></span>
+            </div>
+          </header>
+
+          <!-- 管理员博客列表（由 js/main.js 渲染） -->
+          <div class="post-list" id="adminPostList"></div>
+
+          <!-- 分区内的「展开更多 / 收起」 -->
+          <div class="section__more" id="adminMore"></div>
+
+          <!-- 分区内的空状态 -->
+          <div class="empty hidden" id="adminEmpty">
+            <div class="empty__icon">🖼️</div>
+            <p>管理员博客里没有找到匹配的内容</p>
+          </div>
+        </section>
+
+        <!-- ==================== 分区二：用户博客 ==================== -->
+        <section class="section" id="userSection">
+          <header class="section__head">
+            <div class="section__info">
+              <h2 class="section__title">✍️ 用户博客</h2>
+              <p class="section__desc">
+                普通用户自己发布的博客（不包含 yg 的图片随笔），登录后你也可以在这里发表。
+              </p>
+            </div>
+            <div class="section__actions">
+              <span class="section__count" id="userCount"></span>
+              <a class="btn btn--ghost" href="user.html">进入用户博客专区 →</a>
+            </div>
+          </header>
+
+          <!-- 用户博客列表（由 js/main.js 渲染） -->
+          <div class="post-list" id="userPostListHome"></div>
+
+          <!-- 分区内的「展开更多 / 收起」 -->
+          <div class="section__more" id="userMore"></div>
+
+          <!-- 分区内的空状态 + 发布引导 -->
+          <div class="empty hidden" id="userEmpty">
+            <div class="empty__icon">✍️</div>
+            <p>用户博客里还没有匹配的内容</p>
+            <p class="text-sub" style="font-size:13px">登录后点击下方按钮，发布你的第一篇图文博客。</p>
+            <div class="empty__actions">
+              <a class="btn btn--primary" href="publish.html">去发布我的博客</a>
+              <a class="btn btn--ghost" href="user.html">进入用户博客专区</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============================ 页脚 ============================ -->
+  <footer class="site-footer">
+    梗指北 · 纯前端实现 · 数据保存在浏览器 localStorage
+  </footer>
+
+  <!-- 图片放大遮罩 -->
+  <div class="lightbox" id="lightbox"></div>
+  <!-- 轻提示 -->
+  <div class="toast" id="toast"></div>
+
+  <!-- 业务逻辑（defer：等 HTML 解析完再执行） -->
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>

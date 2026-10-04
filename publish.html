@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>发布博客 · 梗指北</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<!-- data-page 告诉 main.js：当前是发布页 -->
+<body data-page="publish">
+
+  <!-- ============================ 顶部导航 ============================ -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="index.html">
+        <span class="logo__dot"></span>
+        梗指北
+      </a>
+      <nav class="nav" id="nav"></nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- ============================ 发布表单 ============================ -->
+    <form class="form-card form-card--wide" id="publishForm" novalidate>
+      <h1 class="page-title" style="margin-top:0">发布博客</h1>
+      <p class="page-desc">支持「文字 + 图片」，图片会压缩后保存到浏览器本地存储。</p>
+
+      <!-- 发布提示：告知用户发布后的去向与注意事项 -->
+      <div class="callout">
+        <span class="callout__icon">💡</span>
+        <div class="callout__body">
+          <p class="callout__title">发布提示</p>
+          <p class="callout__text">
+            发布成功后，你的博客会出现在首页的「用户博客」分区，并同步显示在
+            <a href="user.html">用户博客专区</a>，其他登录用户可以在博客下方用文字评论。
+            图片会自动压缩（最长边 1280px），请尽量少传大图，以免浏览器存储空间不足。
+          </p>
+        </div>
+      </div>
+
+      <div class="form-msg" id="formMsg"></div>
+
+      <!-- 标题 -->
+      <div class="form-item">
+        <label class="form-label" for="title">博客标题<span class="required">*</span></label>
+        <input class="input" id="title" name="title" type="text" maxlength="60" placeholder="给博客起个标题（最多 60 字）"
+          required />
+      </div>
+
+      <!-- 正文 -->
+      <div class="form-item">
+        <label class="form-label" for="content">文字描述<span class="required">*</span></label>
+        <textarea class="textarea" id="content" name="content" maxlength="5000" placeholder="写点什么吧…（最多 5000 字）"
+          required></textarea>
+        <p class="form-hint" id="contentCounter">0 / 5000</p>
+      </div>
+
+      <!-- 配图（可选，选择后立即本地预览） -->
+      <div class="form-item">
+        <label class="form-label" for="image">博客配图（可选，支持 jpg / png / gif / webp）</label>
+        <input class="input" id="image" name="image" type="file" accept="image/*" />
+        <div class="file-preview hidden" id="filePreview"></div>
+      </div>
+
+      <button class="btn btn--primary btn--block" type="submit" id="submitBtn">发 布</button>
+    </form>
+  </main>
+
+  <footer class="site-footer">
+    梗指北 · 纯前端实现 · 数据保存在浏览器 localStorage
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/main.js" defer></script>
+</body>
+
+</html>
